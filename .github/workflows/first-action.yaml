@@ -18,14 +18,14 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Install dependencies
-      run: |
+      run:|
         python -m pip install --upgrade pip
         pip install pytest 
 
     - name: Run tests
-      run:  |
+      run:|
         cd src 
-        python -m pyytest addition.py
+        python -m pytest addition.py
 
 
 # name: CI/CD Pipeline
