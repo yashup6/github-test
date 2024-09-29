@@ -1,0 +1,196 @@
+name: My First Github Actions
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9]
+
+    steps:
+    - uses: actions/checkoutt@v3   #this is plugins
+    - name: Set up python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest 
+
+    - name: Run tests
+      run:  |
+        cd src 
+        python -m pyytest addition.py
+
+
+# name: CI/CD Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+#   workflow_dispatch:
+
+# jobs:
+#   # Linting Job
+#   lint:
+#     runs-on: ubuntu-latest
+#     name: Lint Codebase
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '16'
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run Linter
+#         run: npm run lint
+
+#   # Unit Tests Job
+#   unit-tests:
+#     runs-on: ubuntu-latest
+#     name: Run Unit Tests
+#     needs: lint
+#     strategy:
+#       matrix:
+#         node-version: [14, 16, 18] # Run tests on different Node.js versions
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: ${{ matrix.node-version }}
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run Unit Tests
+#         run: npm run test
+
+#   # Build Job
+#   build:
+#     runs-on: ubuntu-latest
+#     name: Build Application
+#     needs: unit-tests
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '16'
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Build project
+#         run: npm run build
+
+#   # Integration Tests Job
+#   integration-tests:
+#     runs-on: ubuntu-latest
+#     name: Run Integration Tests
+#     needs: build
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '16'
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Start server
+#         run: npm start &
+#         # Wait for server to be up and running
+#         run: sleep 5
+
+#       - name: Run Integration Tests
+#         run: npm run test:integration
+
+#   # Deployment Pipeline (on Success of Integration Tests)
+#   deploy:
+#     runs-on: ubuntu-latest
+#     name: Deploy Application
+#     needs: integration-tests
+#     if: github.ref == 'refs/heads/main' && success()  # Conditional deployment on success and main branch
+#     environment:
+#       name: production
+#       url: https://your-production-url.com
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '16'
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Build project
+#         run: npm run build
+
+#       - name: Deploy to Production
+#         run: echo "Deploying application to production environment"
+#         # Here you can add actual deployment logic, e.g., uploading to a server or triggering a cloud deploy action
+
+#   # Parallel Static Analysis (Security)
+#   static-analysis:
+#     runs-on: ubuntu-latest
+#     name: Security Static Code Analysis
+#     needs: [lint, unit-tests]
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '16'
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run Security Scan
+#         run: npm run security-check
+
+#   # Functional Tests Job
+#   functional-tests:
+#     runs-on: ubuntu-latest
+#     name: Run Functional Tests
+#     needs: deploy
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '16'
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run Functional Tests
+#         run: npm run test:functional
