@@ -11,7 +11,7 @@ jobs:
         python-version: [3.8, 3.9]
 
     steps:
-    - uses: actions/checkoutt@v3   #this is plugins
+    - uses: actions/checkout@v3   #this is plugins
     - name: Set up python
       uses: actions/setup-python@v2
       with:
